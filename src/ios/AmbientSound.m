@@ -2,6 +2,7 @@
  * Cordova (iOS) plugin for setting the ambient sound setting on the device
  */
 #import "AmbientSound.h"
+#import <Cordova/CDV.h>
 #import <AVFoundation/AVFoundation.h>
 
 @implementation AmbientSound
