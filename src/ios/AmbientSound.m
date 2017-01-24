@@ -2,47 +2,15 @@
  * Cordova (iOS) plugin for setting the ambient sound setting on the device
  */
 #import "AmbientSound.h"
+#import <AVFoundation/AVFoundation.h>
 
-/**
- * Actual implementation of the interface
- */
 @implementation AmbientSound
-- (void) acquire:(CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* result = nil;
-    
-    // Acquire a reference to the local UIApplication singleton
-    UIApplication* app = [UIApplication sharedApplication];
-    
-    if( ![app isIdleTimerDisabled] ) {
-        [app setIdleTimerDisabled:true];
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    }
-    else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"IdleTimer already disabled"];
-    }
-    
-	[self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
-
-- (void) release:(CDVInvokedUrlCommand*)command
-{    
-    CDVPluginResult* result = nil;
-    
-    // Acquire a reference to the local UIApplication singleton
-    UIApplication* app = [UIApplication sharedApplication];
-    
-    if( [app isIdleTimerDisabled] ) {
-        [app setIdleTimerDisabled:false];
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    }
-    else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"IdleTimer not disabled"];
-    }
-    
-	[self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+- (void)pluginInitialize {
+	NSLog(@"Setting ambient sound");
+	NSError *setCategoryError = nil;
+	BOOL success = [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error: &setCategoryError];
+	if (!success) {
+		NSLog(@"AVAudioSession EROR");
+	}
 }
 @end
